@@ -1,0 +1,46 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,200;0,300;0,400;0,500;1,100;1,400&display=swap");
+@import url('Nav.css');
+@import url('Library.css');
+@import url('Player.css');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* @-webkit-keyframes changeBg {
+  0%   {background-image: url("public/images/lofi_img.jpg");}
+  25%   {background-image: url("public/images/lofi_img2.jpg");}
+  50%   {background-image: url("public/images/lofi_img3.jpg");}
+  75%   {background-image: url("public/images/lofi_img4.jpg");}
+  100%   {background-image: url("public/images/lofi_img5.jpg");}
+} */
+
+body {
+  font-family: "Poppins", sans-serif;
+  color: #071739;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background: linear-gradient(
+    to bottom,
+    rgba(220, 208, 156, 0.65) 30%,
+    #FD8A8A 90%
+  );
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+a {
+  text-decoration: none;
+}
+
+.App {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  width: 100vw;
+}
