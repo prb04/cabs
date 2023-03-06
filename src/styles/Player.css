@@ -120,7 +120,9 @@
     cursor: pointer;
  }
   .time-control p {
-    padding: 10px 6px;
+    margin: 10px 6px;
+    width: 39px;
+    align-items: center;
  }
   
   input[type="range"]:focus {

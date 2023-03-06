@@ -3,8 +3,8 @@ import React from "react";
 function PlayerDetails({
   duration,
   trackProgress,
-  onScrub,
-  onScrubEnd,
+  dragHandler,
+  dragHandlerEnd,
   song,
   audioRef,
   getTime,
@@ -26,8 +26,8 @@ function PlayerDetails({
       </div>
       <div className="time-control">
         <p>
-          {audioRef?.current?.currentTime
-            ? getTime(audioRef?.current?.currentTime)
+          {audioRef?.current?.currentTime !== undefined
+            ? getTime(audioRef.current.currentTime)
             : `0:00`}
         </p>
         <div
@@ -41,9 +41,9 @@ function PlayerDetails({
             value={trackProgress}
             min="0"
             max={duration ? duration : `${duration}`}
-            onChange={(e) => onScrub(e.target.value)}
-            onMouseUp={onScrubEnd}
-            onKeyUp={onScrubEnd}
+            onChange={(e) => dragHandler(e.target.value)}
+            onMouseUp={dragHandlerEnd}
+            onKeyUp={dragHandlerEnd}
           />
           <div style={trackAnim} className="animate-track"></div>
         </div>

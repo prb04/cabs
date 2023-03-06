@@ -18,7 +18,7 @@ const App = () => {
   // const [sendReq, setSendReq] = useState(false);
 
   const audioRef = useRef(null);
-  const intervalRef = useRef();
+  const intervalRef = useRef(null);
   const isReady = useRef(false);
 
   const [isPlaying, setIsPlaying] = useState(false);
@@ -29,14 +29,48 @@ const App = () => {
   //   active: "false",
   // }));
 
-  const onScrub = (value) => {
+  //Play/Pause functionality
+  useEffect(() => {
+    if (isPlaying) {
+      audioRef.current.play();
+      startTimer();
+    } else {
+      audioRef.current.pause();
+    }
+  }, [isPlaying]);
+
+  // Handles cleanup and setup when changing tracks
+  useEffect(() => {
+    audioRef.current.pause();
+    audioRef.current = new Audio(songs[currentSongIndex].src);
+    setTrackProgress(audioRef.current.currentTime);
+
+    if (isReady.current) {
+      audioRef.current.play();
+      setIsPlaying(true);
+      startTimer();
+    } else {
+      // Set the isReady ref as true for the next pass
+      isReady.current = true;
+    }
+  }, [currentSongIndex]);
+
+  useEffect(() => {
+    // Pause and clean up on unmount
+    return () => {
+      audioRef.current.pause();
+      clearInterval(intervalRef.current);
+    };
+  }, []);
+
+  const dragHandler = (value) => {
     // Clear any timers already running
     clearInterval(intervalRef.current);
     audioRef.current.currentTime = value;
     setTrackProgress(audioRef.current.currentTime);
   };
 
-  const onScrubEnd = () => {
+  const dragHandlerEnd = () => {
     // If not already playing, start
     if (!isPlaying) {
       setIsPlaying(true);
@@ -79,50 +113,23 @@ const App = () => {
 
   const startTimer = () => {
     // Clear any timers already running
+    console.log(intervalRef.current);
     clearInterval(intervalRef.current);
 
     intervalRef.current = setInterval(() => {
       if (audioRef.current.ended) {
         skipSong();
       } else {
-        setTrackProgress(audioRef?.current.currentTime);
+        setTrackProgress(audioRef.current.currentTime);
       }
     }, [1000]);
   };
 
-  //Play/Pause functionality
-  useEffect(() => {
-    if (isPlaying) {
-      audioRef.current.play();
-      startTimer();
-    } else {
-      audioRef.current.pause();
+  const onLoadedMetadata = () => {
+    if (audioRef.current) {
+      console.log(audioRef.current.duration);
     }
-  }, [isPlaying]);
-
-  // Handles cleanup and setup when changing tracks
-  useEffect(() => {
-    audioRef.current.pause();
-    audioRef.current = new Audio(songs[currentSongIndex].src);
-    setTrackProgress(audioRef.current.currentTime);
-
-    if (isReady.current) {
-      audioRef.current.play();
-      setIsPlaying(true);
-      startTimer();
-    } else {
-      // Set the isReady ref as true for the next pass
-      isReady.current = true;
-    }
-  }, [currentSongIndex]);
-
-  useEffect(() => {
-    // Pause and clean up on unmount
-    return () => {
-      audioRef.current.pause();
-      clearInterval(intervalRef.current);
-    };
-  }, []);
+  };
 
   //Handles next song details
   // useEffect(() => {
@@ -151,15 +158,19 @@ const App = () => {
         trackProgress={trackProgress}
         currentSongIndex={currentSongIndex}
         setCurrentSongIndex={setCurrentSongIndex}
-        onScrub={onScrub}
-        onScrubEnd={onScrubEnd}
+        dragHandler={dragHandler}
+        dragHandlerEnd={dragHandlerEnd}
         libraryStatus={libraryStatus}
         songs={songs}
         isPlaying={isPlaying}
         setIsPlaying={setIsPlaying}
         skipSong={skipSong}
       />
-      <audio src={songs[currentSongIndex].src} ref={audioRef}></audio>
+      <audio
+        src={songs[currentSongIndex].src}
+        ref={audioRef}
+        onLoadedMetadata={onLoadedMetadata}
+      ></audio>
     </div>
   );
 };

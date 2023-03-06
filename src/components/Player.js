@@ -10,8 +10,8 @@ const Player = ({
   isPlaying,
   setIsPlaying,
   skipSong,
-  onScrub,
-  onScrubEnd,
+  dragHandler,
+  dragHandlerEnd,
   songs,
 }) => {
   const currentPercentage = audioRef?.current?.duration
@@ -37,8 +37,8 @@ const Player = ({
           trackProgress={trackProgress}
           currentPercentage={currentPercentage}
           trackStyling={trackStyling}
-          onScrub={onScrub}
-          onScrubEnd={onScrubEnd}
+          dragHandler={dragHandler}
+          dragHandlerEnd={dragHandlerEnd}
           song={songs[currentSongIndex]}
           audioRef={audioRef}
           getTime={getTime}
